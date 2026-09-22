@@ -1,17 +1,8 @@
 #
 # Copyright (C) 2022 FlamingoOS Project
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-# http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# SPDX-FileCopyrightText: 2022 FlamingoOS Project
+# SPDX-FileCopyrightText: 2025-2026 The LineageOS Project
+# SPDX-License-Identifier: Apache-2.0
 #
 
 # Dolby path
@@ -19,7 +10,7 @@ DOLBY_PATH := hardware/dolby
 
 # Soong Namespace
 PRODUCT_SOONG_NAMESPACES += \
-   $(DOLBY_PATH)
+    $(DOLBY_PATH)
 
 # Enable codec support
 AUDIO_FEATURE_ENABLED_DS2_DOLBY_DAP := true
@@ -36,29 +27,33 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     DolbyFrameworksResCommon
 
-# Spatial Audio: optimize spatializer effect
-PRODUCT_VENDOR_PROPERTIES += \
-       audio.spatializer.effect.util_clamp_min=300
+# Properties
+PRODUCT_ODM_PROPERTIES += \
+    audio.spatializer.pose_predictor_type=2 \
+    audio.spatializer.prediction_duration_ms=50 \
+    persist.vendor.audio.effectimplenter=dolby \
+    persist.vendor.audio.spatializer.enable=false
 
-# Spatial Audio: declare use of spatial audio
 PRODUCT_VENDOR_PROPERTIES += \
-       ro.audio.spatializer_enabled=true \
-       ro.audio.headtracking_enabled=true \
-       ro.audio.spatializer_transaural_enabled_default=false \
-       ro.audio.stereo_spatialization_enabled=true \
-       persist.vendor.audio.spatializer.speaker_enabled=true
-
-# Codec2 Props
-PRODUCT_VENDOR_PROPERTIES += \
-    vendor.audio.c2.preferred=true \
+    audio.spatializer.effect.util_clamp_min=300 \
     debug.c2.use_dmabufheaps=1 \
-    vendor.qc2audio.suspend.enabled=true \
-    vendor.qc2audio.per_frame.flac.dec.enabled=true
-
-# Dolby Props
-PRODUCT_VENDOR_PROPERTIES += \
+    persist.vendor.audio.dolby.tws_tuning=true \
+    persist.vendor.audio.effectimplenter=dolby \
+    persist.vendor.audio.spatializer.speaker_enabled=true \
+    persist.vendor.audio_fx.current=dolby \
+    ro.audio.headtracking_enabled=true \
+    ro.audio.spatializer_enabled=true \
+    ro.audio.spatializer_transaural_enabled_default=false \
+    ro.audio.stereo_spatialization_enabled=true \
+    ro.vendor.dolby.dax.version=DAX3_3.12.0.8_r1 \
+    vendor.audio.c2.preferred=true \
+    vendor.audio.dolby.ds2.enabled=false \
     vendor.audio.dolby.ds2.hardbypass=false \
-    vendor.audio.dolby.ds2.enabled=false
+    vendor.qc2audio.per_frame.flac.dec.enabled=true \
+    vendor.qc2audio.suspend.enabled=true
+
+# Sepolicy
+BOARD_VENDOR_SEPOLICY_DIRS += $(DOLBY_PATH)/sepolicy/vendor
 
 # Init
 PRODUCT_PACKAGES += \

@@ -14,13 +14,6 @@ from extract_utils.fixups_blob import (
     blob_fixups_user_type,
 )
 
-from extract_utils.fixups_lib import (
-    lib_fixup_remove,
-    lib_fixups,
-    lib_fixups_user_type,
-)
-
-from extract_utils.fixups_lib import lib_fixups
 from extract_utils.main import (
     ExtractUtils,
     ExtractUtilsModule,
@@ -29,21 +22,6 @@ from extract_utils.main import (
 namespace_imports = [
     'hardware/dolby',
 ]
-
-libs_add_vendor_suffix = (
-)
-
-def lib_fixup_vendor_suffix(lib: str, partition: str, *args, **kwargs):
-    if partition != 'vendor':
-        return None
-
-    return f'{lib}_{partition}'
-
-
-lib_fixups: lib_fixups_user_type = {
-    **lib_fixups,
-    libs_add_vendor_suffix: lib_fixup_vendor_suffix,
-}
 
 blob_fixups: blob_fixups_user_type = {
     (
@@ -79,7 +57,6 @@ module = ExtractUtilsModule(
     'dolby',
     'aidl',
     blob_fixups=blob_fixups,
-    lib_fixups=lib_fixups,
     namespace_imports=namespace_imports,
 )
 
